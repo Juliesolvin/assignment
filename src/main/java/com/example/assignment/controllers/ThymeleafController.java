@@ -56,6 +56,8 @@ public class ThymeleafController {
             return "home";
         }
 
+        // How to show searched for songs? And get the trackname, album, genre, artist,
+
 }
 
 
