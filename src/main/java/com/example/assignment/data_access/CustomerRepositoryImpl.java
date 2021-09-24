@@ -1,8 +1,9 @@
-package Assignment2Java.data_access;
+package com.example.assignment.data_access;
 
-import Assignment2Java.models.Customer;
-import Assignment2Java.models.CustomerCountry;
-import Assignment2Java.models.CustomerSpender;
+import com.example.assignment.models.Customer;
+import com.example.assignment.models.CustomerCountry;
+import com.example.assignment.models.CustomerGenre;
+import com.example.assignment.models.CustomerSpender;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -16,8 +17,6 @@ import java.util.ArrayList;
      This is where we use queries ect.
     */
     @Repository
-
-    // CLASS
     public class CustomerRepositoryImpl implements CustomerRepository {
 
 
@@ -372,7 +371,16 @@ import java.util.ArrayList;
 
 
          /* Requierement 8: Customer who are the highest spenders
-         * Total in invoice table, ordered descending*/
+         * Total in invoice table, ordered descending
+         *
+         *      SELECT C.CUSTOMERID,
+  	            SUM(I.TOTAL)
+                FROM CUSTOMER C
+                JOIN INVOICE I ON C.CUSTOMERID = I.CUSTOMERID
+                GROUP BY 1
+                OIRDER BY 2 DESC
+                * Make this in java
+        */
 
 
          public ArrayList<CustomerSpender> getCustomersSpend() {
@@ -385,11 +393,9 @@ import java.util.ArrayList;
                  // Makes SQL query
                  // Set alle, where - by the Customers id
 
-                 // Find another solution? Does this work?
-                 PreparedStatement preparedStatement = conn.prepareStatement("SELECT ROUND(SUM(i.Total), 2) as Moneyspent, CustomerId " +
-                         "FROM Invoice i NATURAL JOIN Customer custom " +
-                         "GROUP BY CustomerId " +
-                         "ORDER BY Moneyspent DESC") ;
+                 PreparedStatement preparedStatement = conn.prepareStatement("SELECT C.CustomerId, SUM(i.Total) Total from" +
+                         "Customer C join Invoice I on C.CustomerId = I.CustomerId" +
+                         "ORDERBY Moneyspent DESC") ;
 
                  ResultSet resultSet = preparedStatement.executeQuery();
                  while (resultSet.next()) {
@@ -404,21 +410,24 @@ import java.util.ArrayList;
                  try {
                      conn.close();
                  } catch (Exception exception) {
-                     System.out.println("Exception av noe slag");
+                     System.out.println("Some type of exception");
                  }
              }
              return costumerSpend;
          }
 
-         /* Requierement 9: For a given customer, their most
+         /*
+
+
+
+             /* Requierement 9: For a given customer, their most
          * popular genre (in the case of tie, display both)
          * Most popular in this context means the genre that
          * corresponds to the most tracks from the invoices assoiciated
          * to that customer */
 
-/*   WORK IN PROGRESS:
-         @Override
-         public ArrayList<CustomerGenre> getPopular() {
+
+         public ArrayList<CustomerGenre> getPopular(int Customerid) {
              ArrayList<CustomerGenre> popular = new ArrayList<>();
              try {
                  // Connect to DB
@@ -428,45 +437,33 @@ import java.util.ArrayList;
                  // Makes SQL query
 
                  // Find another solution?
-                 PreparedStatement preparedStatement = conn.prepareStatement("Struggled with this one") ;
+                 PreparedStatement preparedStatement = conn.prepareStatement("SELECT G.Name Genre, count(G.GenreId) Total FROM Customer C" +
+                         " INNER JOIN Invoice I on C.CustomerId = I.CustomerId INNER JOIN InvoiceLine IL on I.InvoiceId = IL.InvoiceId INNER JOIN Track T on T.TrackId = IL.TrackId" +
+                         " INNER JOIN Genre G on G.GenreId = T.GenreId WHERE C.CustomerId = ? GROUP BY G.GenreId ORDER BY TotalInvoices desc "
+                 ) ;
 
+                 preparedStatement.setInt(1, Customerid);
                  ResultSet resultSet = preparedStatement.executeQuery();
-                 while (resultSet.next()) {
-                     //GetDouble and not getInt at totalMoneySpent in CustomerSpender is a double
-                      popular.add(new CustomerSpender(resultSet.getInt(1),  resultSet.getDouble(1.0)));
+
+
+                 while(resultSet.next()){
+                     CustomerGenre customergenre = new CustomerGenre(resultSet.getString("GenreName"),
+                             resultSet.getInt("TotalInvoices"));
+                     popular.add(customergenre);
                  }
-             }
-             catch (Exception exception){
-                 System.out.println("Exceptiontext");
+
+             } catch (SQLException throwables) {
+                 throwables.printStackTrace();
              }
              finally {
                  try {
                      conn.close();
-                 } catch (Exception exception) {
-                     System.out.println("Exception av noe slag");
+                 } catch (SQLException throwables) {
+                     throwables.printStackTrace();
                  }
              }
              return popular;
          }
 
-    */
 
-
-
-         /**
-          * Thymeleaf requirements:
-          * (a) Finds 5 random tracks, 5 random songs, and 5 random genres.
-          * This homepage contains a search bar which is used to search for tracks.
-          * The search bare should not be empty, meaning you cant have an empty search
-          * criterion.
-          */
-
-         /**
-          * Thymeleaf requirements:
-          * (b) The search results page will show the query user has made.
-          * Underneath this, the results will be shown for the search.
-          * The search results should show a row where the track name, artist, album
-          * and genre are shown
-          * The search should also be case insensitive.
-          */
      }

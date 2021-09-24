@@ -1,4 +1,4 @@
-package Assignment2Java.data_access;
+package com.example.assignment.data_access;
 /*
  This class serves the purpose of holding the connection URL
  This means there is only one place in the application where the connection string needs to be written.

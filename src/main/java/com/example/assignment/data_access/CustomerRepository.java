@@ -1,8 +1,9 @@
-package Assignment2Java.data_access;
+package com.example.assignment.data_access;
 
-import Assignment2Java.models.Customer;
-import Assignment2Java.models.CustomerCountry;
-import Assignment2Java.models.CustomerSpender;
+import com.example.assignment.models.Customer;
+import com.example.assignment.models.CustomerCountry;
+import com.example.assignment.models.CustomerGenre;
+import com.example.assignment.models.CustomerSpender;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,9 +18,7 @@ import java.util.ArrayList;
         public Boolean addCustomer(Customer customer);
         public Customer updateCustomer(int id, Customer customer);
         public ArrayList<CustomerSpender> getCustomersSpend();
-
-        // Works in progress:
-        // public ArrayList<CustomerGenre> getPopular();
+        public ArrayList<CustomerGenre> getPopular(int Customerid);
     }
 
 

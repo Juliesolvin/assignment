@@ -1,10 +1,10 @@
-package Assignment2Java.controllers;
+package com.example.assignment.controllers;
 
-import Assignment2Java.models.Customer;
-import Assignment2Java.data_access.CustomerRepository;
-import Assignment2Java.models.CustomerCountry;
-import Assignment2Java.models.CustomerSpender;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.assignment.models.Customer;
+import com.example.assignment.data_access.CustomerRepository;
+import com.example.assignment.models.CustomerCountry;
+import com.example.assignment.models.CustomerSpender;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 
 @RestController
-public class CustomerController<DatabaseManager> {
+public class CustomerController {
 
     // Make  a method for every method in repository
 
@@ -21,6 +21,7 @@ public class CustomerController<DatabaseManager> {
 
 
     public CustomerController(CustomerRepository customerRepository) {
+
         this.customerRepository = customerRepository;
     }
 
@@ -31,6 +32,7 @@ public class CustomerController<DatabaseManager> {
     */
     @RequestMapping(value="/api/customers", method = RequestMethod.GET)
     public ArrayList<Customer> getAllCustomers() throws SQLException {
+        System.out.println("API/CUSTOMERS");
         return customerRepository.getAllCustomers();
     }
 
@@ -41,8 +43,11 @@ public class CustomerController<DatabaseManager> {
      Requirement 2)
     */
 
-    @RequestMapping(value = "api/customers/{id}", method = RequestMethod.GET)
+
+
+    @RequestMapping(value = "/api/customers/{id}", method = RequestMethod.GET)
     public Customer getCustomerByPathId(@PathVariable int id){
+
         return customerRepository.getCustomerById(id);
     }
 

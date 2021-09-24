@@ -1,4 +1,4 @@
-package Assignment2Java.models;
+package com.example.assignment.models;
 
 public class CustomerGenre {
     private String name;
