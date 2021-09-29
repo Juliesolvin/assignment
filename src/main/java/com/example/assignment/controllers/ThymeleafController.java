@@ -51,7 +51,6 @@ public class ThymeleafController {
             model.addAttribute("songs", fivesongs);
             model.addAttribute("genres", fivegenres );
 
-           // model.addAttribute("searchObject", new SearchObject());
 
             return "home";
         }
